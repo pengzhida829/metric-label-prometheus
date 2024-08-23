@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prometheus Metrics</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'css/script.js' %}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>通过 Prometheus 指标查询标签和标签值</h1>
+            <form method="post">
+                <label for="metric_name">输入查询指标:</label>
+                <input type="text" id="metric_name" name="metric_name" required>
+                <input type="hidden" id="saved_metric_name" name="saved_metric_name" value="{{ metric_name }}">
+                <input type="submit" value="获取标签">
+            </form>
+        </div>
+        <div class="result-container">
+            <div class="label_container {% if not labels %}hidden{% endif %}" id="label_container">
+                {% if labels %}
+                    <h2>"{{ metric_name }}"指标的所有标签:</h2>
+                    <!-- <h2>{% if metric_name %}{{ metric_name }}指标的所有标签:{% else %}所有标签:{% endif %}</h2> -->
+                    <ul>
+                        {% for label in labels %}
+                            <li><a href="#" onclick="fetchLabelValues('{{ label }}'); return false;">{{ label }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div id="label_values" style="display: none;"></div>
+        </div>
+    </div>
+</body>
+</html>
